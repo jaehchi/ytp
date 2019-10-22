@@ -19,7 +19,7 @@ console.log('in the content script,', Mousetrap );
         let action = () => {
           this.triggerKey(key.action);
         }
-        console.log('asdf')
+        
         Mousetrap.bind(key.shortcut, action);
       })
     }

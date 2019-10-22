@@ -1,9 +1,9 @@
-console.log('hello from background page :)', localStorage);
+
 const defaultKeys = {
   '_prev_': ['{'],
   '_next_': ['|'],
   '_togglePlay_': ['}'],
-  '_toggleMute_': ['"'],
+  '_toggleMute_': ["shift+'"],
   '_toggleSave_': ['+'],
   '_toggleFocus_': [':'], 
 };
@@ -22,7 +22,7 @@ const configureSettings = () => {
 }
 
 const handleShortcut = ( action: string ) => {
-  console.log(' hitting shortcut functions')
+
   chrome.tabs.query({ url: 'https://www.youtube.com/*'} , function (tabs) {
     if ( !tabs.length ) {
       chrome.tabs.create({ url: 'https://www.youtube.com' });
