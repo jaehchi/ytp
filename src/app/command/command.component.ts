@@ -54,27 +54,38 @@ export class CommandComponent implements OnInit {
       return code.substring(3, 4).toLowerCase();
     }
   }
+
+  _formatBuffers (commands) {
+    let res = `${commands[0].join('+')}`;
+
+    for ( let i = 1; i < commands.length; i++ ) {
+      res = `${res} ${commands[i].join('+')}`;
+    }
+
+    return res;
+  }
   
   onKeyDown(e) {
     e.preventDefault();
     const key = this.formatKeycode(e.code);
     const currentTime = Date.now();
-    let buffer = [];
+    let buffer;
 
-    if ( currentTime - this.lastKeyTime > 1000 ) {
+    if ( currentTime - this.lastKeyTime > 2000 ) {
       buffer = [key];
-      this.commands = 'key'
+      this.buffer = [ buffer ];
+    } else if ( currentTime - this.lastKeyTime > 1000) {
+      buffer = [key];
+      this.buffer = [ ...this.buffer, buffer];
     } else {
-      buffer = [...this.buffer, key];
-      let string = [...buffer].join('+');
-      this.commands = string;
+      buffer = [...this.buffer[this.buffer.length - 1], key];
+      this.buffer[this.buffer.length - 1 ] = buffer;
     }
 
-    
-    this.buffer = buffer;
-    this.commands = [...this.buffer].join('+')
+  
+    this.commands =  this._formatBuffers(this.buffer);
     this.lastKeyTime = currentTime;
 
-
   }
+
 }
