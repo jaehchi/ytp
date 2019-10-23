@@ -71,10 +71,10 @@ export class CommandComponent implements OnInit {
     const currentTime = Date.now();
     let buffer;
 
-    if ( currentTime - this.lastKeyTime > 2000 ) {
+    if ( currentTime - this.lastKeyTime > 1000 ) {
       buffer = [key];
       this.buffer = [ buffer ];
-    } else if ( currentTime - this.lastKeyTime > 1000) {
+    } else if ( currentTime - this.lastKeyTime > 500) {
       buffer = [key];
       this.buffer = [ ...this.buffer, buffer];
     } else {
