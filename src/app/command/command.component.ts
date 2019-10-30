@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { AliasService } from '../alias.service';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -10,76 +11,33 @@ export class CommandComponent implements OnInit {
   public bindings = '';
   public buffer = [];
   public isEditing = false;
-  public shortcutLimit = 3;
+  public aliases = {};
+  public aliasRules = [];
   public lastKeyTime = Date.now();
   
   faPenSquare = faPenSquare;
   @Input('command') public command;
 
 
-  constructor() {}
+  constructor(private _aliases: AliasService) {}
   
-  ngOnInit() {}
-
-  formatKeyGlyphs () {
-    const macGlyphs = {
-      'ArrowLeft': '←', 
-      'ArrowUp': '↑', 
-      'ArrowRight': '→', 
-      'ArrowDown': '↓', 
-      'ShiftLeft': '⇧',
-      'ShiftRight': '⇧',
-      'ControlLeft': '⌃',
-      'ControlRight': '⌃',
-      'AltLeft': '⌥',
-      'AltRight': '⌥',
-      'MetaLeft': '⌘',
-      'MetaRight': '⌘',
-    }
+  ngOnInit() {
+    this.aliases = this._aliases.getAliases();
+    this.aliasRules = this._aliases.getAliasRules();
+    
   }
 
   formatKeycode( code: string ) {
-    const alias = {
-      'BracketLeft': '[',
-      'BracketRight': ']',
-      'Backslash': '\\',
-      'Semicolon': ';',
-      'Quote': "'",
-      'Comma': ',',
-      'Period': '.',
-      'Slash': '/',
-      'Backquote': '`',
-      'Minus': '-',
-      'Equal': '=',
-      'Backspace': 'backspace',
-      'Space': 'space',
-      'Enter': 'enter',  
-      'ArrowLeft': 'left', 
-      'ArrowUp': 'up', 
-      'ArrowRight': 'right', 
-      'ArrowDown': 'down', 
-      'Tab': 'tab',
-      'CapsLock': 'capslock',
-      'ShiftLeft': 'shift',
-      'ShiftRight': 'shift',
-      'ControlLeft': 'ctrl',
-      'ControlRight': 'ctrl',
-      'AltLeft': 'alt',
-      'AltRight': 'alt',
-      'MetaLeft': 'cmd',
-      'MetaRight': 'cmd',
-    }
-
-    if ( alias[code] ) {
-      return alias[code];
+    if ( this.aliases[code] ) {
+      return this.aliases[code];
     } else if ( code.startsWith('Digit') ) {
       return code.substring(5, 6);
     } else {
-      return code.substring(3, 4).toLowerCase();
+      return code.substring(3, 4).toLowerCase();  // want it lowercase for mousetrap. mousetrap will treat uppercase letters as i.e. P => shift + p; 
     }
   }
-
-  _formatBuffers (commands) {
+  
+  _formatBuffers (commands) { 
     let res = `${commands[0].join('+')}`;
 
     for ( let i = 1; i < commands.length; i++ ) {
@@ -96,9 +54,9 @@ export class CommandComponent implements OnInit {
     const currentTime = Date.now();
     let buffer;
 
-    if ( currentTime - this.lastKeyTime < 125 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key)) {
-        buffer = [...this.buffer[this.buffer.length - 1], key];
-        this.buffer[this.buffer.length - 1 ] = buffer;
+    if ( currentTime - this.lastKeyTime < 150 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key)) {
+      buffer = [...this.buffer[this.buffer.length - 1], key];
+      this.buffer[this.buffer.length - 1 ] = buffer;
     } else if ( currentTime - this.lastKeyTime < 1000 && this.buffer.length < 2) {
       buffer = [key];
       this.buffer = [ ...this.buffer, buffer];
@@ -107,7 +65,8 @@ export class CommandComponent implements OnInit {
       this.buffer = [ buffer ];
     }
   
-    this.bindings =  this._formatBuffers(this.buffer);
+    this.bindings =  this._formatBuffers(this.sortAliases(this.buffer));
+
     this.lastKeyTime = currentTime;
   }
 
@@ -122,11 +81,23 @@ export class CommandComponent implements OnInit {
         });
         chrome.storage.sync.set(settings, () => {})
       });
-      this.isEditing = !this.isEditing;
+
+    this.isEditing = !this.isEditing;
   }
 
-  fetchKeyboardShortcut () {
+  sortAliases ( commands) {
+    // sorting commands
+    let newCommands = commands.slice(0);
 
+    const sortAliasWithRules = (a, b) => {
+      let _a = this.aliasRules.indexOf(a);
+      let _b = this.aliasRules.indexOf(b);
+
+      return _a - _b;
+    };
+
+    return newCommands.map( command => {
+      return command.sort(sortAliasWithRules);
+    });
   }
-
 }

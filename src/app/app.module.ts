@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { AliasService } from './alias.service';
 import { KeysService } from './keys.service';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,7 +21,7 @@ import { CommandComponent } from './command/command.component';
     FontAwesomeModule,
     AppRoutingModule,
   ],
-  providers: [KeysService],
+  providers: [KeysService, AliasService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
