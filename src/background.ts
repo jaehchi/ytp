@@ -2,47 +2,46 @@ const commands = [
   {
     command: "_prev",
     name: "previous",
-    description: "plays previous video",
+    description: "Replay",
     bindings: "shift+q",
   },
   {
     command: "_next",
     name: "next",
-    description: "plays next video",
+    description: "Next",
     bindings: "shift+e+backspace",
   },
   {
     command: "_play",
     name: "play",
-    description: "toggles between play and pause",
+    description: "Toggle Play",
     bindings: "shift+w",
   },
   {
     command: "_mute",
     name: "mute",
-    description: "toggles between mute and unmute",
+    description: "Toggle Mute",
     bindings: "shift+z",
   },
   {
     command: "_save",
     name: "save",
-    description: "saves video to playlist",
+    description: "Add video to playlist",
     bindings: "shift+s"
   },
   {
     command: "_focus",
     name: "focus",
-    description: "focuses youtube",
+    description: "Focus Youtube",
     bindings:  "shift+x"
   }
-]
-const configureSettings = () => {
+];
 
+const configureSettings = () => {
   return { keys: commands, theChosenOne: 'Watch later' };
-}
+};
 
 const handleShortcut = ( action: string ) => {
-
   chrome.tabs.query({ url: 'https://www.youtube.com/*'} , function (tabs) {
     if ( !tabs.length ) {
       chrome.tabs.create({ url: 'https://www.youtube.com' });
@@ -52,9 +51,9 @@ const handleShortcut = ( action: string ) => {
       if ( action === '_next' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-next-button").click()' });
       } else if ( action === '_prev' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'window.history.back()'});
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()' });
       } else if ( action === '_play' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()' } );
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()' });
       } else if ( action === '_mute' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-mute-button").click()'});
       } else if ( action === '_focus') {
@@ -68,10 +67,9 @@ const handleShortcut = ( action: string ) => {
       }
     }
   });
-}
+};
 
 const reinjectContentScripts = ( scripts ) => {
- 
   const [ mousetrap, content_script, runtime ] = scripts;
   
   chrome.tabs.query({}, function (tabs) {
@@ -83,8 +81,7 @@ const reinjectContentScripts = ( scripts ) => {
       }
     }
   });
-}
-
+};
 
 chrome.runtime.onInstalled.addListener( ({ reason }) => {
   if ( reason === 'install' ) {
@@ -98,16 +95,6 @@ chrome.runtime.onInstalled.addListener( ({ reason }) => {
     reinjectContentScripts(contentScripts);
   }
 });
-
-const retrieveYtpSettings = () => {
-
-
-  return chrome.storage.sync.get(null, (settings) => {
-    return settings;
-  });
-
-  
-}
 
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener( ( payload ) => {
