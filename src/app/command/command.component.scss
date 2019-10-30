@@ -1,0 +1,39 @@
+#command {
+	width: 450px;
+	display: grid;
+	grid-template-columns: 25px 2fr 2fr;
+}
+
+.command-edit {
+	font-size: 25px;
+}
+
+#shortcuts {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+.key {
+  box-sizing: border-box;
+	display: inline-block;
+	color: #fff;
+	font: bold .8em arial;
+	text-decoration: none;
+	text-align: center;
+  letter-spacing: 1px;
+  line-height: 36px;
+	min-width: 36px;
+  padding: 0 15px;
+	height: 36px;
+
+	margin: 5px;
+	background: #2C2F33;
+  box-shadow: 
+		2px 2px #99aab5,
+		0 1px 0 blue,
+		0 2px 0 yellow,
+		0 2px 3px red;
+
+	border-radius: 4px;
+  border-top: 1px solid #f5f5f5;
+}

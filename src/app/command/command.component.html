@@ -1,4 +1,21 @@
 
-<div>
-  <input [(ngModel)]="commands" (keydown)="onKeyDown($event)" [readonly]="true" disable="tab.disabled">
+<div id="command">
+
+	<fa-icon class="command-edit" (click)="isEditing = !isEditing" [icon]="faPenSquare"></fa-icon>
+	
+	<div>{{command.description}}</div>
+	<div>
+		<div *ngIf="isEditing; else elseBlock">
+			<input [(ngModel)]="bindings" (keydown)="onKeyDown($event)" [readonly]="true">
+			<button (click)="saveKeyboardShortcut()">asdf</button>
+		</div>
+		<ng-template #elseBlock>
+			<div id="shortcuts">
+				<div *ngFor="let binding of command.bindings.split('+')">
+					<div class="key">{{binding}}</div>
+				</div>
+			</div>
+	
+		</ng-template>
+	</div>
 </div>
