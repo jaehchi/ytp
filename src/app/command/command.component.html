@@ -11,8 +11,11 @@
 		</div>
 		<ng-template #elseBlock>
 			<div id="shortcuts">
-				<div *ngFor="let binding of command.bindings.split('+')">
-					<div class="key">{{binding}}</div>
+				<div class="key_combo" *ngFor="let binding of command.bindings.split(' '); first as f">
+					<div *ngIf="!f">→</div>
+					<div *ngFor="let key of binding.split('+')">
+						<div class="key">{{key.toUpperCase()}}</div>
+					</div>
 				</div>
 			</div>
 	

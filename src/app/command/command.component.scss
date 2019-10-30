@@ -13,6 +13,10 @@
 	flex-direction: row;
 	width: 100%;
 }
+.key_combo {
+	display: flex; 
+	flex-direction: row;
+}
 .key {
   box-sizing: border-box;
 	display: inline-block;
@@ -20,12 +24,12 @@
 	font: bold .8em arial;
 	text-decoration: none;
 	text-align: center;
-  letter-spacing: 1px;
-  line-height: 36px;
-	min-width: 36px;
-  padding: 0 15px;
-	height: 36px;
-
+  letter-spacing: 2px;
+  line-height: 24px;
+	min-width: 24px;
+  padding: 0 10px;
+	height: 24px;
+	font-size: 10px;
 	margin: 5px;
 	background: #2C2F33;
   box-shadow: 
