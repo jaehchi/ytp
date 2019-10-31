@@ -8,9 +8,9 @@ import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./command.component.scss']
 })
 export class CommandComponent implements OnInit {
+  public isEditing = false;
   public bindings = '';
   public buffer = [];
-  public isEditing = false;
   public aliases = {};
   public aliasRules = [];
   public lastKeyTime = Date.now();
@@ -33,7 +33,7 @@ export class CommandComponent implements OnInit {
     } else if ( code.startsWith('Digit') ) {
       return code.substring(5, 6);
     } else {
-      return code.substring(3, 4).toLowerCase();  // want it lowercase for mousetrap. mousetrap will treat uppercase letters as i.e. P => shift + p; 
+      return code.substring(3, 4).toLowerCase();
     }
   }
   
@@ -70,17 +70,13 @@ export class CommandComponent implements OnInit {
     this.lastKeyTime = currentTime;
   }
 
-  saveKeyboardShortcut () {
+  saveKeyboardShortcut () { 
     this.command.bindings = this.bindings;
 
-      chrome.storage.sync.get(null, (settings) => {
-        settings.keys.forEach( key => {
-          if ( key.name === this.command.name ) {
-            key.bindings = this.bindings;          
-          }
-        });
-        chrome.storage.sync.set(settings, () => {})
-      });
+    chrome.storage.sync.get(this.command.name, (keyBinding) => {
+      keyBinding[this.command.name].bindings = this.bindings;     
+      chrome.storage.sync.set(keyBinding, () => {})
+    });
 
     this.isEditing = !this.isEditing;
   }

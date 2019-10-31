@@ -1,17 +1,12 @@
 (() => {
-  // interface KeyAction {
-  //   action: string;
-  //   shortcut: Array<string>;
-  // }
-
-  interface KeyBinding{ 
+  interface KeyBinding { 
+    name: string;
     command: string;
     description: string;
     binding: string;
   }
 
   class Shortcut {
-
     keys: KeyBinding; 
 
     constructor (keys) {
@@ -40,17 +35,20 @@
 
   const PORT = chrome.runtime.connect({ name: `${chrome.runtime.id}-yt-pilot::port` });
   let shortcut;
-  
 
-  chrome.storage.onChanged.addListener(function(changes, namespace) {
-    console.log('hello storage,oncahcnage', changes, namespace )
+  chrome.storage.onChanged.addListener((changes, namespace) => {
+    for (let key in changes) {
+      const { bindings, command } = changes[key].newValue; 
+      
+      Mousetrap.unbind(changes[key].oldValue.bindings);
+      Mousetrap.bind( bindings, () => { shortcut.triggerKey(command) });
+    }
   });
   
   PORT.onMessage.addListener(( payload ) => {
-    console.log('payload,', payload)
-    if ( payload.keys ) {
-      
-      shortcut = new Shortcut(payload.keys)
+    if ( payload ) {
+      const { previous, play, next, mute, save, focus } = payload;
+      shortcut = new Shortcut([ previous, play, next, mute, save, focus ]);
       shortcut.configureKeys();
     }
   });

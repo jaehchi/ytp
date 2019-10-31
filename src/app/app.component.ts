@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   constructor(private _keys: KeysService) {}
 
   async ngOnInit () {
-    this.ytp_settings = await this._keys.getKeys();
+    this.ytp_settings  = await this._keys.getKeys();
+    console.log(this.ytp_settings)
   }
 }

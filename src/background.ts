@@ -1,44 +1,44 @@
-const commands = [
-  {
-    command: "_prev",
+const commands = {
+  "previous": {
     name: "previous",
+    command: "_prev",
     description: "Replay",
     bindings: "shift+q",
   },
-  {
-    command: "_next",
+  "next": {
     name: "next",
-    description: "Next",
+    command: "_next",
+    description: "Play Next",
     bindings: "shift+e+backspace",
   },
-  {
-    command: "_play",
+  "play": {
     name: "play",
+    command: "_play",
     description: "Toggle Play",
     bindings: "shift+w",
   },
-  {
-    command: "_mute",
+  "mute": {
     name: "mute",
+    command: "_mute",
     description: "Toggle Mute",
     bindings: "shift+z",
   },
-  {
-    command: "_save",
+  "save": {
     name: "save",
+    command: "_save",
     description: "Add video to playlist",
     bindings: "shift+s"
   },
-  {
-    command: "_focus",
+  "focus": {
     name: "focus",
+    command: "_focus",
     description: "Focus Youtube",
     bindings:  "shift+x"
   }
-];
+};
 
 const configureSettings = () => {
-  return { keys: commands, theChosenOne: 'Watch later' };
+  return { ...commands, theChosenOne: 'Watch later' };
 };
 
 const handleShortcut = ( action: string ) => {
@@ -53,7 +53,7 @@ const handleShortcut = ( action: string ) => {
       } else if ( action === '_prev' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()' });
       } else if ( action === '_play' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()' });
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()' } );
       } else if ( action === '_mute' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-mute-button").click()'});
       } else if ( action === '_focus') {
@@ -85,8 +85,7 @@ const reinjectContentScripts = ( scripts ) => {
 
 chrome.runtime.onInstalled.addListener( ({ reason }) => {
   if ( reason === 'install' ) {
-    const settings = configureSettings();
-    
+    const settings = configureSettings();    
     chrome.storage.sync.set(settings, () => { });
   }
   
