@@ -7,7 +7,7 @@
   <div *ngIf="ytp_settings">
 
     <div *ngFor="let key of ytp_settings.keys">
-      <app-command [command]="key"></app-command>
+      <app-command [command]="key" [ytp]="ytp_settings"></app-command>
     </div>
   </div>
 

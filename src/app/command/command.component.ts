@@ -10,13 +10,14 @@ import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 export class CommandComponent implements OnInit {
   public isEditing = false;
   public bindings = '';
-  public buffer = [];
   public aliases = {};
+  public buffer = [];
   public aliasRules = [];
   public lastKeyTime = Date.now();
   
   faPenSquare = faPenSquare;
   @Input('command') public command;
+  @Input('ytp') public ytp;
 
 
   constructor(private _aliases: AliasService) {}
@@ -35,6 +36,19 @@ export class CommandComponent implements OnInit {
     } else {
       return code.substring(3, 4).toLowerCase();
     }
+  }
+
+  sortAliases (commands) {
+    // sorting commands
+    let newCommands = commands.slice(0);
+
+    const sortAliasWithRules = (a, b) => {
+      return this.aliasRules.indexOf(a) - this.aliasRules.indexOf(b);
+    };
+
+    return newCommands.map( command => {
+      return command.sort(sortAliasWithRules);
+    });
   }
   
   _formatBuffers (commands) { 
@@ -66,34 +80,28 @@ export class CommandComponent implements OnInit {
     }
   
     this.bindings =  this._formatBuffers(this.sortAliases(this.buffer));
-
     this.lastKeyTime = currentTime;
   }
 
-  saveKeyboardShortcut () { 
+  saveKeyboardShortcut () { // TODO: prevent duplicate bindings for each command;
+    if ( !this.bindings.length ) { // prevents saving nothing;
+      this.isEditing = !this.isEditing;
+      return;
+    }
+
+    for ( let i = 0; i < this.ytp.keys.length; i++ ) {
+      if ( this.ytp.keys[i].bindings === this.bindings ) {
+        console.log( ' duplicate key combo deteched')
+        return;
+      }
+    }
+
     this.command.bindings = this.bindings;
 
-    chrome.storage.sync.get(this.command.name, (keyBinding) => {
-      keyBinding[this.command.name].bindings = this.bindings;     
-      chrome.storage.sync.set(keyBinding, () => {})
+    chrome.storage.sync.set( { [this.command.name]: this.command }, () => {
+      this.bindings = "";
     });
 
     this.isEditing = !this.isEditing;
-  }
-
-  sortAliases ( commands) {
-    // sorting commands
-    let newCommands = commands.slice(0);
-
-    const sortAliasWithRules = (a, b) => {
-      let _a = this.aliasRules.indexOf(a);
-      let _b = this.aliasRules.indexOf(b);
-
-      return _a - _b;
-    };
-
-    return newCommands.map( command => {
-      return command.sort(sortAliasWithRules);
-    });
   }
 }
