@@ -9,6 +9,7 @@ import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 })
 export class CommandComponent implements OnInit {
   public isEditing = false;
+  public showEditButton = false;
   public bindings = '';
   public aliases = {};
   public buffer = [];
@@ -25,7 +26,6 @@ export class CommandComponent implements OnInit {
   ngOnInit() {
     this.aliases = this._aliases.getAliases();
     this.aliasRules = this._aliases.getAliasRules();
-    
   }
 
   formatKeycode( code: string ) {

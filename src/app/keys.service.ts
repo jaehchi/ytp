@@ -8,8 +8,8 @@ export class KeysService {
   getKeys ()  {
     return new Promise((resolve, reject) => {
       chrome.storage.sync.get( null, (res) => {
-        const { previous, play, next, mute, save, focus, theChosenOne } = res;
-        resolve({ keys: [ previous, play, next, mute, save, focus ], theChosenOne });
+        const { previous, play, next, mute, save, replay, focus, theChosenOne } = res;
+        resolve({ keys: [ previous, next, replay, play, mute, save, focus ], theChosenOne });
       });
     });
   }

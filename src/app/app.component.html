@@ -1,16 +1,14 @@
 <div id="ytp">
-  <div>Youtube Pilot</div>
-  <div>
-    <div>Command</div>
-    <div>Keybinding</div>
+  <div class="ytp__name">Youtube Pilot</div>
+  <div class="ytp__lists">
+    <div class="ytp__lists__command">Command</div>
+    <div class="ytp__lists__keybinding">Keybinding</div>
   </div>
   <div *ngIf="ytp_settings">
-
     <div *ngFor="let key of ytp_settings.keys">
       <app-command [command]="key" [ytp]="ytp_settings"></app-command>
     </div>
   </div>
-
 </div>
 
 <router-outlet></router-outlet>

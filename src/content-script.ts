@@ -47,8 +47,8 @@
   
   PORT.onMessage.addListener(( payload ) => {
     if ( payload ) {
-      const { previous, play, next, mute, save, focus } = payload;
-      shortcut = new Shortcut([ previous, play, next, mute, save, focus ]);
+      const { previous, play, next, replay, mute, save, focus } = payload;
+      shortcut = new Shortcut([ previous, play, next, replay, mute, save, focus ]);
       shortcut.configureKeys();
     }
   });

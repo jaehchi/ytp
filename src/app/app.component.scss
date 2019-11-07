@@ -1,0 +1,25 @@
+#ytp {
+  color: black;
+}
+
+.ytp__name {
+  font: bold 1em arial;
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ytp__lists {
+  min-width: 450px;
+	display: grid;
+  grid-template-columns: 16px 1.25fr 3fr;
+  grid-template-areas: ". command keybinding";
+}
+
+.ytp__lists__command {
+  grid-area: command;
+}
+
+.ytp__lists__keybinding {
+  grid-area: keybinding;
+}

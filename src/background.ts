@@ -2,7 +2,7 @@ const commands = {
   "previous": {
     name: "previous",
     command: "_prev",
-    description: "Replay",
+    description: "Play Previous",
     bindings: "shift+q",
   },
   "next": {
@@ -16,6 +16,12 @@ const commands = {
     command: "_play",
     description: "Toggle Play",
     bindings: "shift+w",
+  },
+  "replay": {
+    name: "replay",
+    command: "_replay",
+    description: "Replay",
+    bindings: "shift+r",
   },
   "mute": {
     name: "mute",
@@ -51,9 +57,11 @@ const handleShortcut = ( action: string ) => {
       if ( action === '_next' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-next-button").click()' });
       } else if ( action === '_prev' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()' });
+        chrome.tabs.executeScript(tab.id, { code: 'window.history.back()' });
       } else if ( action === '_play' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()' } );
+      } else if ( action === '_replay') {
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()' });
       } else if ( action === '_mute' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-mute-button").click()'});
       } else if ( action === '_focus') {
