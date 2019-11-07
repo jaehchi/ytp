@@ -1,7 +1,7 @@
 
 <div id="command" (mouseenter)="showEditButton = true" (mouseleave)="showEditButton=false">
 	<div class="command-edit">
-		<fa-icon *ngIf="showEditButton" (click)="isEditing = !isEditing" [icon]="faPenSquare"></fa-icon>
+		<fa-icon *ngIf="showEditButton" (click)="isEditing = !isEditing; this.bindings=''" [icon]="faPenSquare"></fa-icon>
 	</div>
 	<div class="command__description">{{command.description}}</div>
 	<div>
