@@ -10,10 +10,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommandComponent } from './command/command.component';
 
+import { AutofocusDirective } from './autofocus.directive';
+
 @NgModule({
   declarations: [
     AppComponent,
     CommandComponent,
+    AutofocusDirective,
   ],
   imports: [
     BrowserModule,

@@ -29,6 +29,9 @@ export class CommandComponent implements OnInit {
   }
 
   formatKeycode( code: string ) {
+    if ( code === 'Escape' ) {
+      return false;
+    }
     if ( this.aliases[code] ) {
       return this.aliases[code];
     } else if ( code.startsWith('Digit') ) {
@@ -63,10 +66,15 @@ export class CommandComponent implements OnInit {
   
   onKeyDown(e) {
     e.preventDefault();
-
     const key = this.formatKeycode(e.code);
     const currentTime = Date.now();
     let buffer;
+
+    if ( !key ) {
+      this.isEditing = !this.isEditing;
+      return;
+    } 
+
 
     if ( currentTime - this.lastKeyTime < 150 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key)) {
       buffer = [...this.buffer[this.buffer.length - 1], key];
@@ -83,7 +91,7 @@ export class CommandComponent implements OnInit {
     this.lastKeyTime = currentTime;
   }
 
-  saveKeyboardShortcut () { // TODO: prevent duplicate bindings for each command;
+  saveKeyboardShortcut () { 
     if ( !this.bindings.length ) { // prevents saving nothing;
       this.isEditing = !this.isEditing;
       return;

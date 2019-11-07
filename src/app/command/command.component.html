@@ -6,7 +6,7 @@
 	<div class="command__description">{{command.description}}</div>
 	<div>
 		<div *ngIf="isEditing; else elseBlock">
-			<input [(ngModel)]="bindings" (keydown)="onKeyDown($event)" [readonly]="true">
+			<input [(ngModel)]="bindings" (keydown)="onKeyDown($event)" [readonly]="true" appAutofocus>
 			<button (click)="saveKeyboardShortcut()">asdf</button>
 		</div>
 		<ng-template #elseBlock>
