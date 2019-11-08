@@ -9,7 +9,6 @@ import { KeysService } from './keys.service';
 
 export class AppComponent implements OnInit {
   title = 'ytp';
-  name = 'jae';
   public ytp_settings;
   constructor(private _keys: KeysService) {}
 

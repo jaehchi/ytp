@@ -1,19 +1,31 @@
+
+
 #ytp {
-  color: black;
+
 }
 
 .ytp__name {
-  font: bold 1em arial;
-  width: 200px;
-  margin: 0 auto;
+  // font: bold 1em arial;
+  color: #BF616A;
+  font-size: 24px;
+  text-transform: uppercase;
+  width: 80%;
+  margin: 0 auto 10px auto;
+  letter-spacing: 1px;
+  text-shadow: 0px 1px, 1px 0px, 1px 1px;
   text-align: center;
 }
 
 .ytp__lists {
-  min-width: 450px;
-	display: grid;
-  grid-template-columns: 16px 1.25fr 3fr;
+  padding: 0 8px;
+  font-weight: 700;
+  font-size: 12px;
+  display: grid;
+  margin-bottom: 6px;
+  min-width: 500px;
+	grid-template-columns: 20px 1.5fr 3fr;
   grid-template-areas: ". command keybinding";
+  color: #ECEFF4;
 }
 
 .ytp__lists__command {
@@ -22,4 +34,14 @@
 
 .ytp__lists__keybinding {
   grid-area: keybinding;
+}
+
+.even {
+  background-color: #3b4252;
+  color: #E5E9F0;
+}
+
+.odd {
+  background-color: #2E3440;
+  color: #E5E9F0;
 }

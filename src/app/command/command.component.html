@@ -4,17 +4,19 @@
 		<fa-icon *ngIf="showEditButton" (click)="isEditing = !isEditing; this.bindings=''" [icon]="faPenSquare"></fa-icon>
 	</div>
 	<div class="command__description">{{command.description}}</div>
-	<div>
-		<div *ngIf="isEditing; else elseBlock">
-			<input [(ngModel)]="bindings" (keydown)="onKeyDown($event)" [readonly]="true" appAutofocus>
-			<button (click)="saveKeyboardShortcut()">asdf</button>
+	<div class="command__hotkeys">
+		<div *ngIf="isEditing; else elseBlock" style="display: flex; align-items: center;">
+			<div style="width: 100%">
+				<input style="width: 300px" [(ngModel)]="showBindings" (keydown)="onKeyDown($event)" [readonly]="true" appAutofocus>
+				<button (click)="saveKeyboardShortcut()">asdf</button>
+			</div>
 		</div>
 		<ng-template #elseBlock>
 			<div id="shortcuts">
 				<div class="key_combo" *ngFor="let binding of command.bindings.split(' '); first as f">
 					<div *ngIf="!f">→</div>
-					<div *ngFor="let key of binding.split('+')">
-						<div class="key">{{key.toUpperCase()}}</div>
+					<div *ngFor="let key of binding.split('+'); first as f; last as l;">
+						<div class="key" [ngClass]="{ firstKey: f, lastKey: l }">{{key.toUpperCase()}}</div>
 					</div>
 				</div>
 			</div>

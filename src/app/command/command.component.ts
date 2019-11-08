@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AliasService } from '../alias.service';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 
+// TODO: clean up css, fix input, fix input retain showBindings, show errors when duplicate bindings is used, 
+// reject certain keys, enter to saveToKeyboard.. 
 @Component({
   selector: 'app-command',
   templateUrl: './command.component.html',
@@ -11,6 +13,7 @@ export class CommandComponent implements OnInit {
   public isEditing = false;
   public showEditButton = false;
   public bindings = '';
+  public showBindings = '';
   public aliases = {};
   public buffer = [];
   public aliasRules = [];
@@ -63,6 +66,17 @@ export class CommandComponent implements OnInit {
 
     return res;
   }
+
+  _formatBuffersForShow (commands) {
+    let res = `${commands[0].join('+')}`;
+
+    for ( let i = 1; i < commands.length; i++ ) {
+      res = `${res} chords to ${commands[i].join('+')}`;
+    }
+
+    return res;
+  
+  }
   
   onKeyDown(e) {
     e.preventDefault();
@@ -74,7 +88,6 @@ export class CommandComponent implements OnInit {
       this.isEditing = !this.isEditing;
       return;
     } 
-
 
     if ( currentTime - this.lastKeyTime < 150 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key)) {
       buffer = [...this.buffer[this.buffer.length - 1], key];
@@ -88,6 +101,7 @@ export class CommandComponent implements OnInit {
     }
   
     this.bindings =  this._formatBuffers(this.sortAliases(this.buffer));
+    this.showBindings = this._formatBuffersForShow(this.sortAliases(this.buffer));
     this.lastKeyTime = currentTime;
   }
 
@@ -99,7 +113,9 @@ export class CommandComponent implements OnInit {
 
     for ( let i = 0; i < this.ytp.keys.length; i++ ) {
       if ( this.ytp.keys[i].bindings === this.bindings ) {
-        console.log( ' duplicate key combo deteched')
+        console.log( 'duplicate key combo deteched');
+        this.bindings = "";
+        this.isEditing = !this.isEditing;
         return;
       }
     }
