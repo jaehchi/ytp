@@ -1,14 +1,13 @@
 
-<div id="command" (mouseenter)="showEditButton = true" (mouseleave)="showEditButton=false">
+<div id="command" (mouseenter)="showEditButton = true" (mouseleave)="showEditButton=false" [class.command-hover]="showEditButton">
 	<div class="command-edit">
-		<fa-icon *ngIf="showEditButton" (click)="isEditing = !isEditing; this.bindings=''" [icon]="faPenSquare"></fa-icon>
+		<fa-icon *ngIf="showEditButton" (click)="isEditing = !isEditing; this.showBindings=''" [icon]="faPenSquare"></fa-icon>
 	</div>
 	<div class="command__description">{{command.description}}</div>
 	<div class="command__hotkeys">
 		<div *ngIf="isEditing; else elseBlock" style="display: flex; align-items: center;">
-			<div style="width: 100%">
-				<input style="width: 300px" [(ngModel)]="showBindings" (keydown)="onKeyDown($event)" [readonly]="true" appAutofocus>
-				<button (click)="saveKeyboardShortcut()">asdf</button>
+			<div class="command__editBindings">
+				<input [(ngModel)]="showBindings" (keydown)="onKeyDown($event)" [readonly]="true" appAutofocus>
 			</div>
 		</div>
 		<ng-template #elseBlock>

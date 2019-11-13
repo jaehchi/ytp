@@ -30,14 +30,16 @@
 
 .ytp__lists__command {
   grid-area: command;
+  letter-spacing: .5px;
 }
 
 .ytp__lists__keybinding {
   grid-area: keybinding;
+  letter-spacing: .5px;
 }
 
 .even {
-  background-color: #3b4252;
+  background-color: lighten( #2E3440, 3% ); 
   color: #E5E9F0;
 }
 

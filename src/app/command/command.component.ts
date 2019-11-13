@@ -2,13 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AliasService } from '../alias.service';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 
-// TODO: clean up css, fix input, fix input retain showBindings, show errors when duplicate bindings is used, 
+// TODO: clean up css,  show errors when duplicate bindings is used, 
 // reject certain keys, enter to saveToKeyboard.. 
 @Component({
   selector: 'app-command',
   templateUrl: './command.component.html',
   styleUrls: ['./command.component.scss']
 })
+
 export class CommandComponent implements OnInit {
   public isEditing = false;
   public showEditButton = false;
@@ -89,16 +90,18 @@ export class CommandComponent implements OnInit {
       return;
     } 
 
-    if ( currentTime - this.lastKeyTime < 150 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key)) {
+    if ( currentTime - this.lastKeyTime < 150 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key) ) {
       buffer = [...this.buffer[this.buffer.length - 1], key];
       this.buffer[this.buffer.length - 1 ] = buffer;
-    } else if ( currentTime - this.lastKeyTime < 1000 && this.buffer.length < 2) {
+    } else if ( currentTime - this.lastKeyTime < 900 && this.buffer.length < 2 ) {
       buffer = [key];
       this.buffer = [ ...this.buffer, buffer];
+    } else if ( currentTime - this.lastKeyTime < 1800 && key === 'enter' || this.buffer.length === 2 && key === 'enter' ) {
+      this.saveKeyboardShortcut();
     } else {
       buffer = [key];
       this.buffer = [ buffer ];
-    }
+    } 
   
     this.bindings =  this._formatBuffers(this.sortAliases(this.buffer));
     this.showBindings = this._formatBuffersForShow(this.sortAliases(this.buffer));
@@ -124,6 +127,7 @@ export class CommandComponent implements OnInit {
 
     chrome.storage.sync.set( { [this.command.name]: this.command }, () => {
       this.bindings = "";
+      this.showBindings = "";
     });
 
     this.isEditing = !this.isEditing;
