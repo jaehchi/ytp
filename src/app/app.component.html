@@ -5,6 +5,8 @@
     <div class="ytp__lists__command">COMMAND</div>
     <div class="ytp__lists__keybinding">KEYBINDING</div>
   </div>
+  <button (click)="openDialog()">asdf</button>
+  
   <div *ngIf="ytp_settings">
     <div *ngFor="let key of ytp_settings.keys; let i = index; let e = even; let o = odd;" [ngClass]="{ odd: o, even: e }">
       <app-command [command]="key" [ytp]="ytp_settings"></app-command>
