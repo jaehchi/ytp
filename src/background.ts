@@ -2,19 +2,19 @@ const commands = {
   "previous": {
     name: "previous",
     command: "_prev",
-    description: "Play Previous",
+    description: "Play previous",
     bindings: "shift+q",
   },
   "next": {
     name: "next",
     command: "_next",
-    description: "Play Next",
-    bindings: "shift+e+backspace",
+    description: "Play next",
+    bindings: "shift+e",
   },
   "play": {
     name: "play",
     command: "_play",
-    description: "Toggle Play",
+    description: "Toggle play",
     bindings: "shift+w",
   },
   "replay": {
@@ -26,7 +26,7 @@ const commands = {
   "mute": {
     name: "mute",
     command: "_mute",
-    description: "Toggle Mute",
+    description: "Toggle mute",
     bindings: "shift+z",
   },
   "save": {
@@ -38,7 +38,7 @@ const commands = {
   "focus": {
     name: "focus",
     command: "_focus",
-    description: "Focus Youtube",
+    description: "Focus youtube",
     bindings:  "shift+x"
   }
 };

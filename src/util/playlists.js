@@ -20,6 +20,7 @@ function _toggleSaveToPlaylist () {
 function _togglePlaylistOverlay () {
   const topLevelBtns = document.getElementsByClassName('style-scope ytd-menu-renderer force-icon-button style-default size-default');
 
+
   for ( const btn of topLevelBtns ) {
     btn.children[0].innerText === 'SAVE' ? btn.click() : null;
   }

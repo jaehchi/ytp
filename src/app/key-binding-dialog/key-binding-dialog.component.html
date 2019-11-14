@@ -1,1 +1,3 @@
-<p>key-binding-dialog works!</p>
+<div>Press desired key combination and then press Enter.</div>
+<input  matInput name="bindings" [(ngModel)]="bindings" (keydown)="onKeyDown($event)" (ngSubmit)="_closeDialog()">
+<div>{{ showBindings }}</div>

@@ -2,8 +2,8 @@
 	display: grid;
 	height: 30px;
 	padding: 3px 8px;
-	min-width: 500px;
-	grid-template-columns: 20px 1.5fr 3fr;
+	grid-template-columns: 20px 150px auto;
+	grid-template-areas: "edit description hotkeys";
 }
 
 .command-hover {
@@ -11,6 +11,7 @@
 }
 
 .command-edit {
+	grid-area: "edit";
 	display: flex;
 	align-items: center;
 	font-size: 16px;
@@ -18,41 +19,16 @@
 
 .command__editBindings {
 	width: 100%;
-
-	input {
-		width: 300px;
-		height: 24px;
-		outline: none;
-		border-radius: 3px;
-		border-style: solid;
-		border-width: 1px;
-		text-align: center;
-		box-sizing: border-box;
-		transition: background-color .15s ease,border .15s ease;
-		background-color: rgba(0,0,0,.1);
-		border-color: rgba(0,0,0,.3);
-		color: #f6f6f7;
-		padding: 3px;
-		font-size: 12px;
-	}
-
-	input:placeholder {
-		color: #949494;
-	}
-
-	input:focus {
-		border-bottom: 2px solid red;
-	}
-    
-
 }
 
 .command__description {
+	grid-area: "description";
 	display: flex;
 	align-items: center;
 }
 
 .command__hotkeys {
+	grid-area: "hotkeys";
 	display: flex;
 	width: 100%;
 	align-items: center;
