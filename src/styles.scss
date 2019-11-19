@@ -1,8 +1,65 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 /* You can add global styles to this file, and also import other style files */
 body {
   display: block;
   margin: 0;
-  background-color: #2E3440;
+  background-color: #3B4252;
   padding: 15px 10px;
-  min-width: 400px;
+  min-width: 450px;
+}
+
+.mat-dialog-container {
+	background-color: #242933;
+	padding: 18px;
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0,0,0,.625);
+}
+
+
+
+#shortcuts {
+	display: flex;
+	align-items: center;
+}
+
+.key_combo {
+	display: flex; 
+	align-items: center;
+	flex-direction: row;
+	color: #fff;
+
+}
+.key {
+  box-sizing: border-box;
+	display: inline-block;
+	font: bold 12px arial;
+	text-decoration: none;
+	text-align: center;
+  letter-spacing: .5px;
+  line-height: 20px;
+	min-width: 20px;
+  padding: 0 5px;
+	height: 20px;
+	margin: 3px;
+	
+	color: #88C0D0;
+	background: #2E3440;
+  box-shadow: 
+		.5px .5px #4C566A,
+		0 1px 0 #8FBCBB,
+		0 2px 0 #5E81AC,
+		0 2px 3px #81A1C1;
+		border-top: 1px solid #81A1C1;
+
+	border-radius: 4px;
+}
+
+.firstKey {
+  margin-left: 0;
+}
+
+.lastKey {
+  margin-right: 0;
 }

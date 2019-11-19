@@ -1,7 +1,41 @@
-.dialog__key__combo {
-  width: 100%;
-  
-	input {
-		width: 100%;
-  }
+
+
+.dialog__title {
+  text-align: center;
+  color: #8FBCBB;
+  font-size: 14px;
 }
+
+.dialog__key__combo {	
+  width: 100%;
+  height: 28px;	
+  outline: none;	
+  border-radius: 3px;	
+  border-style: solid;	
+  border-width: 1px;	
+  text-align: center;	
+  box-sizing: border-box;	
+  transition: background-color .15s ease,border .15s ease;
+  letter-spacing: .5px;	
+  background-color: #2E3440;
+  border-color: rgba(0,0,0,.3);	
+  color: #88C0D0;	
+  padding: 6px;
+  line-height: 28px;
+  margin-top: 17px;
+  font-size: 12px;	
+
+  &:focus {	
+    border: 1px solid #81A1C1;	
+  }
+}	
+
+.dialog__showcase {
+  color: #2E3440;
+  width: 100%;
+  margin: 10px 0;
+  padding-top: 4px;
+  display: flex;
+  justify-content: center;
+}
+

@@ -13,9 +13,9 @@ import { KeyBindingDialogComponent } from '../key-binding-dialog/key-binding-dia
 })
 
 export class CommandComponent implements OnInit {
-  faPenSquare = faPenSquare;
   @Input('command') public command;
   @Input('ytp') public ytp;
+  faPenSquare = faPenSquare;
   public showEditButton = false;
 
 
@@ -25,8 +25,8 @@ export class CommandComponent implements OnInit {
   
   openDialog (): void {
     const config = {
-      height: '150px',
-      width: '400px',
+      height: '160px',
+      width: '450px',
     };
 
     let dialogRef = this._dialog.open(KeyBindingDialogComponent, config);
@@ -45,7 +45,7 @@ export class CommandComponent implements OnInit {
 
     for ( let i = 0; i < this.ytp.keys.length; i++ ) {
       if ( this.ytp.keys[i].bindings === binding ) {
-        // prevents having same bindingw for different actions;
+        // prevents having same bindings for different actions;
         return;
       }
     }

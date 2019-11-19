@@ -1,3 +1,12 @@
-<div>Press desired key combination and then press Enter.</div>
-<input  matInput name="bindings" [(ngModel)]="bindings" (keydown)="onKeyDown($event)" (ngSubmit)="_closeDialog()">
-<div>{{ showBindings }}</div>
+
+<div class="dialog__title">Press desired key combination and then press Enter.</div>
+<input class="dialog__key__combo" matInput name="bindings" [(ngModel)]="bindings" (keydown)="onKeyDown($event)">
+<div class="dialog__showcase">
+  <div id="shortcuts" *ngIf="bindings.length !== 0">
+    <div class="key_combo" *ngFor="let binding of showBindings.split(' '); first as f;">
+      <div *ngFor="let key of binding.split('+'); first as f; last as l;">
+        <div class="key" [ngClass]="{ firstKey: f, lastKey: l }">{{key}}</div>
+      </div>
+    </div>
+  </div>
+</div>

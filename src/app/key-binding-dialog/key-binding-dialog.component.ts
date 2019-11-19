@@ -1,5 +1,6 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ComponentFactoryResolver } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA }  from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 
 import { AliasService } from '../alias.service';
 
@@ -14,39 +15,52 @@ export class KeyBindingDialogComponent {
   public buffer = [];
   public lastKeyTime = Date.now();
   public aliases = {};
+  public mac = {};
   public aliasRules = [];
-  
+  public os = '';
 
   constructor( 
     @Inject(MAT_DIALOG_DATA) private _data: any,
     private _aliases: AliasService,
     public _dialogRef: MatDialogRef<KeyBindingDialogComponent>, 
-  ) { }
+  ) { 
+    chrome.runtime.getPlatformInfo( (info) => {
+      this.os = info.os;
+    });
+
+    console.log(this)
+  }
 
   ngOnInit() {
     this.aliases = this._aliases.getAliases();
     this.aliasRules = this._aliases.getAliasRules();
+    this.mac = this._aliases.getMacGlyphs();
   }
 
   onKeyDown(e) {
+    console.log(this)
     e.preventDefault();
+
     const key = this.formatKeycode(e.code);
     const currentTime = Date.now();
+    const isEnterForSave = this.buffer && key === 'enter' && (this.buffer.length === 0 || this.buffer.length === 2);
     let buffer;
 
-    if ( this.buffer.length === 0 && key === 'enter' ) {
+    if ( isEnterForSave ) {
       this._closeDialog();
       return;
     }
 
-    if ( currentTime - this.lastKeyTime < 150 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key) ) {
+    if ( currentTime - this.lastKeyTime < 125 && this.buffer[this.buffer.length - 1].length < 3 && !this.buffer[this.buffer.length - 1].includes(key) ) {
       buffer = [...this.buffer[this.buffer.length - 1], key];
       this.buffer[this.buffer.length - 1 ] = buffer;
-    } else if ( currentTime - this.lastKeyTime < 300 && this.buffer.length < 2 ) {
+    } else if ( currentTime - this.lastKeyTime < 700 && this.buffer.length < 2 ) {
+      if ( key === 'enter' )  {
+        this._closeDialog();
+        return;
+      } 
       buffer = [key];
       this.buffer = [ ...this.buffer, buffer];
-    } else if ( currentTime - this.lastKeyTime < 800 && key === 'enter' || this.buffer.length === 2 && key === 'enter' ) {
-      this._closeDialog()
     } else {
       buffer = [key];
       this.buffer = [ buffer ];
@@ -57,17 +71,19 @@ export class KeyBindingDialogComponent {
     this.lastKeyTime = currentTime;
   }
   
-  formatKeycode( code: string ) {
+  formatKeycode( code: string ) { 
     if ( code === 'Escape' ) {
       return false;
     }
-
+    
     if ( this.aliases[code] ) {
       return this.aliases[code];
     } else if ( code.startsWith('Digit') ) {
       return code.substring(5, 6);
-    } else {
+    } else if ( code.startsWith('Key') ) {
       return code.substring(3, 4).toLowerCase();
+    } else {
+      return code;
     }
   }
 
@@ -95,10 +111,26 @@ export class KeyBindingDialogComponent {
   }
 
   _formatBuffersForShow (commands) {
-    let res = `${commands[0].join('+')}`;
+    let formatted;
 
-    for ( let i = 1; i < commands.length; i++ ) {
-      res = `${res} chords to ${commands[i].join('+')}`;
+    if ( this.os === 'mac' ) {
+      formatted = commands.map( command => {
+        return command.map( key => {
+          if ( this.mac[key] ) {
+            return this.mac[key];
+          }
+
+          return key.toUpperCase();
+        });
+      });
+    } else {
+      formatted = commands;
+    }
+
+    let res = `${formatted[0].join('+')}`;
+
+    for ( let i = 1; i < formatted.length; i++ ) {
+      res = `${res} ${formatted[i].join('+')}`;
     }
 
     return res;
