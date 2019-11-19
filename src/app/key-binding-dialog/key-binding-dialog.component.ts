@@ -41,7 +41,7 @@ export class KeyBindingDialogComponent {
     console.log(this)
     e.preventDefault();
 
-    const key = this.formatKeycode(e.code);
+    const key = this._aliases.formatKeycode(e.code);
     const currentTime = Date.now();
     const isEnterForSave = this.buffer && key === 'enter' && (this.buffer.length === 0 || this.buffer.length === 2);
     let buffer;
@@ -66,39 +66,11 @@ export class KeyBindingDialogComponent {
       this.buffer = [ buffer ];
     } 
   
-    this.bindings =  this._formatBuffers(this.sortAliases(this.buffer));
-    this.showBindings = this._formatBuffersForShow(this.sortAliases(this.buffer));
+    this.bindings =  this._formatBuffers(this._aliases.sortBuffersWithAliasRules(this.buffer));
+    this.showBindings = this._formatBuffersForShow(this._aliases.sortBuffersWithAliasRules(this.buffer));
     this.lastKeyTime = currentTime;
   }
   
-  formatKeycode( code: string ) { 
-    if ( code === 'Escape' ) {
-      return false;
-    }
-    
-    if ( this.aliases[code] ) {
-      return this.aliases[code];
-    } else if ( code.startsWith('Digit') ) {
-      return code.substring(5, 6);
-    } else if ( code.startsWith('Key') ) {
-      return code.substring(3, 4).toLowerCase();
-    } else {
-      return code;
-    }
-  }
-
-  sortAliases (commands) {
-    // sorting commands
-    let newCommands = commands.slice(0);
-
-    const sortAliasWithRules = (a, b) => {
-      return this.aliasRules.indexOf(a) - this.aliasRules.indexOf(b);
-    };
-
-    return newCommands.map( command => {
-      return command.sort(sortAliasWithRules);
-    });
-  }
   
   _formatBuffers (commands) { 
     let res = `${commands[0].join('+')}`;
@@ -124,7 +96,7 @@ export class KeyBindingDialogComponent {
         });
       });
     } else {
-      formatted = commands;
+      formatted = commands
     }
 
     let res = `${formatted[0].join('+')}`;
