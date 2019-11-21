@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AliasService } from './alias.service';
 import { KeysService } from './keys.service';
+import { FormatService } from './format.service';
 
 import { AppComponent } from './app.component';
 import { CommandComponent } from './command/command.component';
@@ -43,7 +44,7 @@ import { KeyBindingDialogComponent } from './key-binding-dialog/key-binding-dial
     MatFormFieldModule,
 
   ],
-  providers: [KeysService, AliasService],
+  providers: [KeysService, AliasService, FormatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
