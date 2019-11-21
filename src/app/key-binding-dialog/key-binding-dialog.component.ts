@@ -1,8 +1,8 @@
-import { Component, Inject, ComponentFactoryResolver } from '@angular/core';
+import { Component, Inject  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA }  from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 
 import { AliasService } from '../alias.service';
+import { FormatService } from '../format.service';
 
 @Component({
   selector: 'app-key-binding-dialog',
@@ -11,7 +11,7 @@ import { AliasService } from '../alias.service';
 })
 export class KeyBindingDialogComponent {
   public bindings = '';
-  public showBindings = '';
+  public showBindings = [];
   public buffer = [];
   public lastKeyTime = Date.now();
   public aliases = {};
@@ -20,28 +20,19 @@ export class KeyBindingDialogComponent {
   public os = '';
 
   constructor( 
-    @Inject(MAT_DIALOG_DATA) private _data: any,
+    @Inject(MAT_DIALOG_DATA) public _data: any,
     private _aliases: AliasService,
+    private _format: FormatService,
     public _dialogRef: MatDialogRef<KeyBindingDialogComponent>, 
-  ) { 
-    chrome.runtime.getPlatformInfo( (info) => {
-      this.os = info.os;
-    });
+  ) {}
 
-    console.log(this)
-  }
+  ngOnInit() {}
 
-  ngOnInit() {
-    this.aliases = this._aliases.getAliases();
-    this.aliasRules = this._aliases.getAliasRules();
-    this.mac = this._aliases.getMacGlyphs();
-  }
-
-  onKeyDown(e) {
-    console.log(this)
+  onKeyDown(e: KeyboardEvent) {
+    console.log(this);
     e.preventDefault();
-
-    const key = this._aliases.formatKeycode(e.code);
+    
+    const key = this._aliases.formatKeycode(e.code); // formats key code alias rules  i.e space 1 a etc
     const currentTime = Date.now();
     const isEnterForSave = this.buffer && key === 'enter' && (this.buffer.length === 0 || this.buffer.length === 2);
     let buffer;
@@ -60,55 +51,21 @@ export class KeyBindingDialogComponent {
         return;
       } 
       buffer = [key];
-      this.buffer = [ ...this.buffer, buffer];
+      this.buffer = [...this.buffer, buffer];
     } else {
       buffer = [key];
       this.buffer = [ buffer ];
-    } 
+    }
   
-    this.bindings =  this._formatBuffers(this._aliases.sortBuffersWithAliasRules(this.buffer));
-    this.showBindings = this._formatBuffersForShow(this._aliases.sortBuffersWithAliasRules(this.buffer));
+    let sortedAliases = this._aliases.sortBuffersWithAliasRules( this.buffer );
+    this.bindings = this._format.formatBuffers(sortedAliases);
+    this.showBindings = this._format.formatForOS(this.bindings, null);
+   
     this.lastKeyTime = currentTime;
-  }
-  
-  
-  _formatBuffers (commands) { 
-    let res = `${commands[0].join('+')}`;
-
-    for ( let i = 1; i < commands.length; i++ ) {
-      res = `${res} ${commands[i].join('+')}`;
-    }
-
-    return res;
-  }
-
-  _formatBuffersForShow (commands) {
-    let formatted;
-
-    if ( this.os === 'mac' ) {
-      formatted = commands.map( command => {
-        return command.map( key => {
-          if ( this.mac[key] ) {
-            return this.mac[key];
-          }
-
-          return key.toUpperCase();
-        });
-      });
-    } else {
-      formatted = commands
-    }
-
-    let res = `${formatted[0].join('+')}`;
-
-    for ( let i = 1; i < formatted.length; i++ ) {
-      res = `${res} ${formatted[i].join('+')}`;
-    }
-
-    return res;
   }
 
   _closeDialog() {
+
     this._dialogRef.close(this.bindings);
     return;
   }

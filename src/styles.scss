@@ -29,23 +29,29 @@ body {
 	align-items: center;
 	flex-direction: row;
 	color: #fff;
-
+	margin: 0 6px;
 }
+
+.chorded__keys {
+	margin-right: 8px;
+	margin-left: -4px;
+}
+
 .key {
   box-sizing: border-box;
 	display: inline-block;
-	font: bold 12px arial;
+	font: bold 10px arial;
 	text-decoration: none;
 	text-align: center;
   letter-spacing: .5px;
-  line-height: 20px;
-	min-width: 20px;
+  line-height: 22px;
+	min-width: 24px;
   padding: 0 5px;
-	height: 20px;
+	height: 22px;
 	margin: 3px;
 	
-	color: #88C0D0;
-	background: #2E3440;
+	color: #ECEFF4;
+	background: #5E81AC;
   box-shadow: 
 		.5px .5px #4C566A,
 		0 1px 0 #8FBCBB,

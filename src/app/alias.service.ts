@@ -1,74 +1,35 @@
 import { Injectable } from '@angular/core';
-import { stringify } from '@angular/compiler/src/util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AliasService {
-  public aliases = {
-    'BracketLeft': '[',
-    'BracketRight': ']',
-    'Backslash': '\\',
-    'Semicolon': ';',
-    'Quote': "'",
-    'Comma': ',',
-    'Period': '.',
-    'Slash': '/',
-    'Backquote': '`',
-    'Minus': '-',
-    'Equal': '=',
-    'Backspace': 'backspace',
-    'Space': 'space',
-    'Enter': 'enter',  
-    'Tab': 'tab',
-    'CapsLock': 'capslock',
-    'ArrowLeft': 'left', 
-    'ArrowUp': 'up', 
-    'ArrowRight': 'right', 
-    'ArrowDown': 'down', 
-    'ShiftLeft': 'shift',
-    'ShiftRight': 'shift',
-    'ControlLeft': 'ctrl',
-    'ControlRight': 'ctrl',
-    'AltLeft': 'alt',
-    'AltRight': 'alt',
-    'MetaLeft': 'command',
-    'MetaRight': 'command',
-  }
-
-  public macGlyphs = {
-    'left': '←', 
-    'up': '↑', 
-    'right': '→', 
-    'down': '↓', 
-    'shift': '⇧',
-    'ctrl': '⌃',
-    'alt': '⌥',
-    'command': '⌘',
-    'enter': '↩',
-    'backspace': '⌫',
-    'capslock': '⇪',
-    'tab': '⇥'
-  };
-
-  public aliasesRules = [];
+  private aliases = {};
+  public macSymbols = {};
+  private aliasesRules = [];
 
   constructor() { 
+    this.aliases = this._addAliases();
+    this.macSymbols = this._addMacSymbols();
     this.aliasesRules = [ 
-      ...this.addSpecialAliasToRules(),
-      ...this.addFunctionKeysToRules(),
-      ...this.addAlphabetToRules(),
-      ...this.addSymbolsToRules(),
-      ...this.addNumbersToRules()
+      ...this._addSpecialAliasToRules(),
+      ...this._addFunctionKeysToRules(),
+      ...this._addAlphabetToRules(),
+      ...this._addSymbolsToRules(),
+      ...this._addNumbersToRules()
     ];
   }
 
-  addSpecialAliasToRules () {
+  _addSpecialAliasToRules () {
     return [ 
       'ctrl',
       'shift',
       'alt',
       'command',
+      'home', 
+      'end',
+      'pageup',
+      'pagedown',
       'backspace',
       'capslock',
       'space',
@@ -81,7 +42,7 @@ export class AliasService {
     ];
   }
 
-  addSymbolsToRules () {
+  _addSymbolsToRules () {
     return [
       '[',
       ']',
@@ -97,11 +58,11 @@ export class AliasService {
     ];
   }
 
-  addAlphabetToRules () {
+  _addAlphabetToRules () {
     return 'abcdefghijklmnopqrstuvwxyz'.split('');
   }
 
-  addNumbersToRules () {
+  _addNumbersToRules () {
     let numbers = [];
 
     for ( let i = 1; i < 10; i++ ) { numbers.push(`${i}`); }
@@ -110,27 +71,73 @@ export class AliasService {
     return numbers;
   }
 
-  addFunctionKeysToRules () {
+  _addFunctionKeysToRules () {
     let fnKeys = [];
 
     for ( let i = 1; i < 13; i++ ) { fnKeys.push(`F${i}`); }
 
     return fnKeys;
   }
-  
-  getAliases ()  {
-    return this.aliases;
+
+  _addMacSymbols () {
+    return {
+      'left': '←', 
+      'up': '↑', 
+      'right': '→', 
+      'down': '↓', 
+      'shift': '⇧',
+      'ctrl': '⌃',
+      'alt': '⌥',
+      'command': '⌘',
+      'enter': '↵',
+      'backspace': '⌫',
+      'capslock': '⇪',
+      'tab': '⇥'
+    };
   }
 
-  getAliasRules () {
-    return this.aliasesRules;
+  _addAliases () {
+    return {
+      'BracketLeft': '[',
+      'BracketRight': ']',
+      'Backslash': '\\',
+      'Semicolon': ';',
+      'Quote': "'",
+      'Comma': ',',
+      'Period': '.',
+      'Slash': '/',
+      'Backquote': '`',
+      'Minus': '-',
+      'Equal': '=',
+      'Backspace': 'backspace',
+      'Space': 'space',
+      'Enter': 'enter',  
+      'Tab': 'tab',
+      'Home': 'home', 
+      'End': 'end',
+      'PageUp': 'pageup',
+      'PageDown': 'pagedown',
+      'CapsLock': 'capslock',
+      'ArrowLeft': 'left', 
+      'ArrowUp': 'up', 
+      'ArrowRight': 'right', 
+      'ArrowDown': 'down', 
+      'ShiftLeft': 'shift',
+      'ShiftRight': 'shift',
+      'ControlLeft': 'ctrl',
+      'ControlRight': 'ctrl',
+      'AltLeft': 'alt',
+      'AltRight': 'alt',
+      'MetaLeft': 'command',
+      'MetaRight': 'command',
+    }
   }
 
-  getMacGlyphs () {
-    return this.macGlyphs;
+  _getMacGlyphs () {
+    return this.macSymbols;
   }
 
-  sortBuffersWithAliasRules ( commands ) {
+  sortBuffersWithAliasRules ( commands: Array<Array<string>> ) {
     // sorting commands
     let newCommands = commands.slice(0);
 

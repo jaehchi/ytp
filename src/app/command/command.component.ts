@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog}  from '@angular/material/dialog';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 
+import { FormatService } from '../format.service';
 import { KeyBindingDialogComponent } from '../key-binding-dialog/key-binding-dialog.component';
 
 // TODO: clean up css,  show errors when duplicate bindings is used, 
@@ -18,15 +19,17 @@ export class CommandComponent implements OnInit {
   faPenSquare = faPenSquare;
   public showEditButton = false;
 
-
-  constructor(private _dialog: MatDialog) {}
+  constructor(private _dialog: MatDialog, public _format: FormatService) {}
   
   ngOnInit() {}
   
   openDialog (): void {
     const config = {
-      height: '160px',
+      height: '170px',
       width: '450px',
+      data: {
+        os: this.ytp.os,
+      }
     };
 
     let dialogRef = this._dialog.open(KeyBindingDialogComponent, config);

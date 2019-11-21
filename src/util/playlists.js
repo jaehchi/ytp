@@ -8,9 +8,12 @@ function _toggleSaveToPlaylist () {
 
   setTimeout(() => {
     const playlists = document.getElementById('playlists').children;
+    let lists = [];
     
     for ( let playlist of playlists ) {
-      playlist.children[0].innerText === theChosenOne ?  playlist.children[0].click() : null;
+      let playlistName = playlist.children[0].innerText;
+      lists.push(playlistName);
+      playlistName === theChosenOne ?  playlist.children[0].click() : null;
     }
 
     _togglePlaylistOverlay();

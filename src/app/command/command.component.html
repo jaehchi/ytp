@@ -6,10 +6,10 @@
 	<div class="command__description">{{command.description}}</div>
 	<div class="command__hotkeys">
 		<div id="shortcuts">
-			<div class="key_combo" *ngFor="let binding of command.bindings.split(' '); first as f">
-				<div *ngIf="!f">→</div>
-				<div *ngFor="let key of binding.split('+'); first as f; last as l;">
-					<div class="key" [ngClass]="{ firstKey: f, lastKey: l }">{{key.toUpperCase()}}</div>
+			<div class="key_combo" *ngFor="let binding of _format.formatForOS(command.bindings, ytp.os); first as f">
+				<!-- <div *ngIf="!f">→</div> -->
+				<div *ngFor="let key of binding; first as f; last as l;">
+					<div class="key" [ngClass]="{ firstKey: f, lastKey: l }">{{key}}</div>
 				</div>
 			</div>
 		</div>
