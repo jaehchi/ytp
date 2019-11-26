@@ -55,11 +55,11 @@ const handleShortcut = ( action: string ) => {
 
     for ( let tab of tabs ) {
       if ( action === '_next' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-next-button").click()' });
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-next-button").click()'});
       } else if ( action === '_prev' ) {
         chrome.tabs.executeScript(tab.id, { code: 'window.history.back()' });
       } else if ( action === '_play' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()' } );
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()'});
       } else if ( action === '_replay') {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()' });
       } else if ( action === '_mute' ) {
@@ -67,9 +67,11 @@ const handleShortcut = ( action: string ) => {
       } else if ( action === '_focus') {
         chrome.tabs.update(tab.id, { active: true });
       } else if ( action === '_save' ) {
-        chrome.storage.sync.get('theChosenOne', ({ theChosenOne }) => {
+        chrome.storage.local.get('theChosenOne', ({ theChosenOne }) => {
           chrome.tabs.executeScript(tab.id, { code: `var theChosenOne = '${theChosenOne}'`}, function () {
-            chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` })
+            chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` }, (res) => [
+              console.log( 'res', res)
+            ]);
           });
         });
       }
@@ -105,6 +107,7 @@ chrome.runtime.onInstalled.addListener( ({ reason }) => {
 
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener( ( payload ) => {
+    console.log(payload);
     if ( payload.action === 'grabKeys' ) {
       chrome.storage.sync.get( null, (settings) => { 
         port.postMessage(settings);

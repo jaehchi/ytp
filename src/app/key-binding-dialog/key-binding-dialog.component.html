@@ -4,7 +4,7 @@
 <div class="dialog__showcase">
   <div id="shortcuts" *ngIf="bindings.length !== 0">
     <div class="key_combo" *ngFor="let binding of showBindings; first as f;">
-      <div class="chorded__keys" *ngIf="!f">{{_data.os === 'macwx' ? 'chords to' : '→'}}</div>
+      <div class="chorded__keys" *ngIf="!f">{{_data.os === 'mac' ? 'chords to' : '→'}}</div>
       <div *ngFor="let key of binding; first as f; last as l;">
         <div class="key" [ngClass]="{ firstKey: f, lastKey: l }">{{key}}</div>
       </div>
