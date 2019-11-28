@@ -43,12 +43,25 @@ const commands = {
   }
 };
 
+
 const configureSettings = () => {
-  return { ...commands, theChosenOne: 'Watch later' };
+  console.log('configure settings')
+  chrome.tabs.query({ url: 'https://www.youtube.com/'}, (tabs) => {
+    chrome.tabs.create({ url: 'https://www.youtube.com' });
+
+    for ( let tab of tabs ) { 
+      chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` });
+    }
+  });
+
+  return { 
+    ...commands,
+    theChosenOne: 'Watch later'
+  };
 };
 
 const handleShortcut = ( action: string ) => {
-  chrome.tabs.query({ url: 'https://www.youtube.com/*'} , function (tabs) {
+  chrome.tabs.query({ url: 'https://www.youtube.com/*'}, (tabs) => {
     if ( !tabs.length ) {
       chrome.tabs.create({ url: 'https://www.youtube.com' });
     }
@@ -57,21 +70,19 @@ const handleShortcut = ( action: string ) => {
       if ( action === '_next' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-next-button").click()'});
       } else if ( action === '_prev' ) {
-        chrome.tabs.executeScript(tab.id, { code: 'window.history.back()' });
+        chrome.tabs.executeScript(tab.id, { code: 'window.history.back()'});
       } else if ( action === '_play' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-play-button").click()'});
       } else if ( action === '_replay') {
-        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()' });
+        chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-prev-button").click()'});
       } else if ( action === '_mute' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-mute-button").click()'});
       } else if ( action === '_focus') {
         chrome.tabs.update(tab.id, { active: true });
       } else if ( action === '_save' ) {
-        chrome.storage.local.get('theChosenOne', ({ theChosenOne }) => {
+        chrome.storage.sync.get('theChosenOne', ({ theChosenOne }) => {
           chrome.tabs.executeScript(tab.id, { code: `var theChosenOne = '${theChosenOne}'`}, function () {
-            chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` }, (res) => [
-              console.log( 'res', res)
-            ]);
+            chrome.tabs.executeScript(tab.id, { file: `util/saveVideo.js` });
           });
         });
       }
@@ -96,6 +107,7 @@ const reinjectContentScripts = ( scripts ) => {
 chrome.runtime.onInstalled.addListener( ({ reason }) => {
   if ( reason === 'install' ) {
     const settings = configureSettings();    
+    console.log(settings, 'configuresettings')
     chrome.storage.sync.set(settings, () => { });
   }
   
@@ -107,12 +119,16 @@ chrome.runtime.onInstalled.addListener( ({ reason }) => {
 
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener( ( payload ) => {
-    console.log(payload);
     if ( payload.action === 'grabKeys' ) {
       chrome.storage.sync.get( null, (settings) => { 
         port.postMessage(settings);
       });
     }
+    
+    chrome.storage.sync.get( null, (settings) => { 
+      settings.playlists = payload.playlists;
+      chrome.storage.sync.set(settings, () => {})
+    });
 
     handleShortcut(payload.action)
   });

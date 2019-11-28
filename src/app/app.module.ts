@@ -8,6 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select'
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -42,6 +43,7 @@ import { KeyBindingDialogComponent } from './key-binding-dialog/key-binding-dial
     MatInputModule,
     MatIconModule,
     MatFormFieldModule,
+    MatSelectModule,
 
   ],
   providers: [KeysService, AliasService, FormatService],
