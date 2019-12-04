@@ -38,17 +38,14 @@ const commands = {
   "focus": {
     name: "focus",
     command: "_focus",
-    description: "Focus youtube",
+    description: "Toggle focus",
     bindings:  "shift+x"
   }
 };
 
 
 const configureSettings = () => {
-  console.log('configure settings')
   chrome.tabs.query({ url: 'https://www.youtube.com/'}, (tabs) => {
-    chrome.tabs.create({ url: 'https://www.youtube.com' });
-
     for ( let tab of tabs ) { 
       chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` });
     }
@@ -56,7 +53,8 @@ const configureSettings = () => {
 
   return { 
     ...commands,
-    theChosenOne: 'Watch later'
+    theChosenOne: 'Watch later',
+    previouslyFocusedTabId: null,
   };
 };
 
@@ -78,7 +76,9 @@ const handleShortcut = ( action: string ) => {
       } else if ( action === '_mute' ) {
         chrome.tabs.executeScript(tab.id, { code: 'document.querySelector(".ytp-mute-button").click()'});
       } else if ( action === '_focus') {
-        chrome.tabs.update(tab.id, { active: true });
+        chrome.tabs.query({ active: true }, (activeTab)=> { 
+          handleToggleFocus( activeTab[0].id, tab.id);
+        });
       } else if ( action === '_save' ) {
         chrome.storage.sync.get('theChosenOne', ({ theChosenOne }) => {
           chrome.tabs.executeScript(tab.id, { code: `var theChosenOne = '${theChosenOne}'`}, function () {
@@ -89,6 +89,16 @@ const handleShortcut = ( action: string ) => {
     }
   });
 };
+const handleToggleFocus = (activeTabId: number, ytTabId: number) => {
+  if ( activeTabId === ytTabId ) {
+    chrome.storage.sync.get('previouslyFocusedTabId', ({ previouslyFocusedTabId }) => {
+      chrome.tabs.update( previouslyFocusedTabId, { active: true });
+    });
+  } else { 
+    chrome.storage.sync.set({ previouslyFocusedTabId: activeTabId });
+    chrome.tabs.update( ytTabId, { active: true });
+  }
+}
 
 const reinjectContentScripts = ( scripts ) => {
   const [ mousetrap, content_script, runtime ] = scripts;
@@ -127,9 +137,9 @@ chrome.runtime.onConnect.addListener((port) => {
     
     chrome.storage.sync.get( null, (settings) => { 
       settings.playlists = payload.playlists;
-      chrome.storage.sync.set(settings, () => {})
+      chrome.storage.sync.set(settings, () => {});
     });
 
-    handleShortcut(payload.action)
+    handleShortcut(payload.action);
   });
 });
