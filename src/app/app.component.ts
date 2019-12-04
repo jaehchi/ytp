@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+
 
 import { KeysService } from './keys.service';
 
@@ -10,7 +11,8 @@ export interface Playlists {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class AppComponent implements OnInit {
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
     this.playlists = this.ytp_settings.playlists.map( (playlist, index) => { 
       return { value: `${index}-${playlist}`, name: playlist };
     })
+    this.selectedPlaylist = this.ytp_settings.theChosenOne;
   }
 
   savePlaylist (val) {

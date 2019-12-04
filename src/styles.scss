@@ -1,11 +1,12 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One&display=swap');
 /* You can add global styles to this file, and also import other style files */
+
 body {
-  display: block;
-  margin: 0;
+	margin: 0;
+	min-width: 450px; 
   background-color: #3B4252;
-  padding: 15px 10px;
-  min-width: 450px;
+  padding: 0 10px 10px 10px;
 }
 
 .mat-dialog-container {
@@ -13,10 +14,72 @@ body {
 	padding: 18px;
 }
 
-.cdk-overlay-dark-backdrop {
-  background: rgba(0,0,0,.625);
+.cdk-global-scrollblock {
+	position: static;
+	overflow: hidden !important;
 }
 
+.cdk-overlay-dark-backdrop {
+	background: rgba(0,0,0,.625);
+}
+
+.mat-form-field-wrapper {
+	margin: 0;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label {
+	color: #ECEFF4;
+}
+.mat-select-value-text {
+	color: #ECEFF4;
+}
+.mat-select-arrow {
+	color: #ECEFF4;
+}
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+	background-color: #ECEFF4;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+	color: #88C0D0;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+	background-color: #88C0D0;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+	color: #88C0D0;
+}
+
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+	color: #88C0D0;
+}
+
+.mat-option {
+	color: #fff;
+}
+
+.mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+	background: #5E81AC;
+	color: #fff;
+}
+
+.mat-option:focus:not(.mat-option-disabled), .mat-option:hover:not(.mat-option-disabled) {
+	background: #88C0D0;
+}
+
+.mat-form-field-ripple {
+	background-color: rgba(0,0,0,.87);
+}
+
+.mat-select-panel {
+	background: #2E3440;
+}
+
+.mat-form-field-wrapper { 
+	margin: 15px 20px; 
+}
 
 
 #shortcuts {
@@ -49,7 +112,6 @@ body {
   padding: 0 5px;
 	height: 22px;
 	margin: 3px;
-	
 	color: #ECEFF4;
 	background: #5E81AC;
   box-shadow: 

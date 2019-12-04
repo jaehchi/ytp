@@ -29,7 +29,7 @@ export class CommandComponent implements OnInit {
       width: '450px',
       data: {
         os: this.ytp.os,
-      }
+      },
     };
 
     let dialogRef = this._dialog.open(KeyBindingDialogComponent, config);

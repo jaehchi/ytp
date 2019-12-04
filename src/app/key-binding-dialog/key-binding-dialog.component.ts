@@ -29,7 +29,6 @@ export class KeyBindingDialogComponent {
   ngOnInit() {}
 
   onKeyDown(e: KeyboardEvent) {
-    console.log(this);
     e.preventDefault();
     
     const key = this._aliases.formatKeycode(e.code); // formats key code alias rules  i.e space 1 a etc
@@ -60,12 +59,11 @@ export class KeyBindingDialogComponent {
     let sortedAliases = this._aliases.sortBuffersWithAliasRules( this.buffer );
     this.bindings = this._format.formatBuffers(sortedAliases);
     this.showBindings = this._format.formatForOS(this.bindings, null);
-   
+
     this.lastKeyTime = currentTime;
   }
 
   _closeDialog() {
-
     this._dialogRef.close(this.bindings);
     return;
   }

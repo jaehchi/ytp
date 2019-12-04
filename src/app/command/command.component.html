@@ -1,5 +1,5 @@
 
-<div id="command" (mouseenter)="showEditButton = true" (mouseleave)="showEditButton=false" [class.command-hover]="showEditButton">
+<div id="command" (mouseenter)="showEditButton=true" (mouseleave)="showEditButton=false" [class.command-hover]="showEditButton">
 	<div class="command-edit">
 		<fa-icon *ngIf="showEditButton" (click)="openDialog()" [icon]="faPenSquare"></fa-icon>
 	</div>
@@ -7,12 +7,10 @@
 	<div class="command__hotkeys">
 		<div id="shortcuts">
 			<div class="key_combo" *ngFor="let binding of _format.formatForOS(command.bindings, ytp.os); first as f">
-				<!-- <div *ngIf="!f">→</div> -->
 				<div *ngFor="let key of binding; first as f; last as l;">
 					<div class="key" [ngClass]="{ firstKey: f, lastKey: l }">{{key}}</div>
 				</div>
 			</div>
 		</div>
-	
 	</div>
 </div>

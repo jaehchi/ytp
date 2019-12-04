@@ -1,15 +1,18 @@
 
 <div id="ytp">
-  <div class="ytp__name">Youtube Pilot</div>
-  <mat-form-field>
-    <mat-label>playlist for save</mat-label>
-    <mat-select (ngModelChange)="savePlaylist($event)" [(ngModel)]="selectedPlaylist">
-      <mat-option *ngFor="let playlist of playlists" [value]="playlist.name">
-        {{playlist.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  {{ selectedPlaylist }}
+  <div class="ytp__header">
+    <h2 class="ytp__name">YouTube
+      <span>Pilot</span>
+    </h2>
+    <mat-form-field class="ytp__playlists">
+      <mat-label>Select a playlist</mat-label>
+      <mat-select (ngModelChange)="savePlaylist($event)" [(ngModel)]="selectedPlaylist">
+          <mat-option *ngFor="let playlist of playlists" [value]="playlist.name">
+            {{playlist.name}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
   <div class="ytp__lists">
     <div class="ytp__lists__command">COMMAND</div>
     <div class="ytp__lists__keybinding">KEYBINDING</div>

@@ -39,12 +39,11 @@ import { KeyBindingDialogComponent } from './key-binding-dialog/key-binding-dial
     FormsModule,
     FontAwesomeModule,
     AppRoutingModule,
+    MatSelectModule,
     MatDialogModule,
+    MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatFormFieldModule,
-    MatSelectModule,
-
   ],
   providers: [KeysService, AliasService, FormatService],
   bootstrap: [AppComponent]
