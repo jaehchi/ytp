@@ -45,7 +45,7 @@ const commands = {
 
 
 const configureSettings = () => {
-  chrome.tabs.query({ url: 'https://www.youtube.com/'}, (tabs) => {
+  chrome.tabs.query({ url: 'https://www.youtube.com/*'}, (tabs) => {
     for ( let tab of tabs ) { 
       chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` });
     }
