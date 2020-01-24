@@ -2,10 +2,10 @@
   const PORT = chrome.runtime.connect({ name: `${chrome.runtime.id}-yt-pilot::port` });
 
   const getPlaylists = () => {
-    _toggleGuideButton();
     _toggleShowMore();
 
-    const playlists = [...document.getElementById("section-items").children, ...document.getElementById("expandable-items").children ];
+    setTimeout(() => {
+      const playlists = [...document.getElementById("section-items").children, ...document.getElementById("expandable-items").children ];
     const viable = [];
 
     for ( let playlist of playlists ) {
@@ -15,18 +15,21 @@
     }
     
     PORT.postMessage({ 'action': "getPlaylists", "playlists": viable.sort( (a, b) => { return a.localeCompare(b) }) });
+    }, 1000);
   }
 
   const _toggleShowMore = () => {
-    document.getElementById('expander-item').click();
-    return;
+    _toggleGuideButton();
+
+    setTimeout(() => {
+      document.getElementById('expander-item').click();
+    }, 1000);
   }
 
   const _toggleGuideButton = () => {
-    if ( document.getElementById("contentContainer").getAttribute('opened') === null ) {
+    if ( document.getElementById("contentContainer") && document.getElementById("contentContainer").getAttribute('opened') === null ) {
       document.getElementById('guide-button').click();
     }
-    return;
   }
 
   getPlaylists();
