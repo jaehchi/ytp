@@ -1,4 +1,5 @@
 (() => {
+  console.log('injected')
   interface KeyBinding { 
     name: string;
     command: string;
@@ -17,23 +18,24 @@
       for ( let key in this.keys ) {
         let { command, bindings } = this.keys[key];
         let action = () => { this.triggerKey( command )};
-        Mousetrap.bind( bindings, action);
+        Mousetrap.bind( bindings, action );
       } 
     }
 
-    triggerKey ( action ) {
+    triggerKey ( action: string ) {
       try { 
         PORT.postMessage({ action })
       } catch ( err ) {
+        Mousetrap.reset();
         // If an error is caught, the content script is orphaned. To prevent the orphaned script from communicating thru port
-        // when hotkeys are pressed, we reset Mousetrap on the orphaned script, unbinding all keys.
-        // Mousetrap.reset()
+        // when hotkeys aSre pressed, we reset Mousetrap on the orphaned script, unbinding all keys.
         // better error handling?
       }
     }
   }
 
   const PORT = chrome.runtime.connect({ name: `${chrome.runtime.id}-yt-pilot::port` });
+
   let shortcut;
 
   chrome.storage.onChanged.addListener((changes, namespace) => {
@@ -45,14 +47,16 @@
     }
   });
   
-  PORT.onMessage.addListener(( payload ) => {
-    if ( payload ) {
-      const { previous, play, next, replay, mute, save, focus } = payload;
-      shortcut = new Shortcut([ previous, play, next, replay, mute, save, focus ]);
-      shortcut.configureKeys();
-    }
-  });
+  const grabKeys = () => {
+    chrome.storage.sync.get( null, (settings) => { 
+      if ( settings ) {
+        const { previous, play, next, replay, mute, save, focus } = settings;
+        shortcut = new Shortcut([ previous, play, next, replay, mute, save, focus ]);
+        shortcut.configureKeys();
+      }
+    });
+  }
 
-  PORT.postMessage({ action: 'grabKeys' });
+  grabKeys();
 })();
 

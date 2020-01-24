@@ -47,7 +47,7 @@ const commands = {
 const configureSettings = () => {
   chrome.tabs.query({ url: 'https://www.youtube.com/*'}, (tabs) => {
     for ( let tab of tabs ) { 
-      chrome.tabs.executeScript(tab.id, { file: `util/playlists.js` });
+      chrome.tabs.executeScript(tab.id, { file: `util/playlists.js`, runAt: 'document_end' });
     }
   });
 
@@ -100,14 +100,17 @@ const handleToggleFocus = (activeTabId: number, ytTabId: number) => {
   }
 }
 
+
 const reinjectContentScripts = ( scripts ) => {
   const [ mousetrap, content_script, runtime ] = scripts;
   
   chrome.tabs.query({}, function (tabs) {
     for ( let tab of tabs ) {
       if ( !tab.url.startsWith("chrome") ) {
-        chrome.tabs.executeScript(tab.id, { file: `${mousetrap}` }, () => {
-          chrome.tabs.executeScript(tab.id, { file: `${content_script}` });
+        chrome.tabs.executeScript(tab.id, { file: mousetrap }, () => {
+          chrome.tabs.executeScript(tab.id, { file: content_script }, () => {
+            chrome.tabs.executeScript(tab.id, { file: runtime })
+          });
         });
       }
     }
@@ -117,24 +120,22 @@ const reinjectContentScripts = ( scripts ) => {
 chrome.runtime.onInstalled.addListener( ({ reason }) => {
   if ( reason === 'install' ) {
     const settings = configureSettings();    
-    console.log(settings, 'configuresettings')
     chrome.storage.sync.set(settings, () => { });
   }
   
   if ( reason === 'update' ) {
     const contentScripts = chrome.runtime.getManifest().content_scripts[0].js;
+    console.log(contentScripts);
     reinjectContentScripts(contentScripts);
   }
 });
 
+
+
 chrome.runtime.onConnect.addListener((port) => {
-  port.onMessage.addListener( ( payload ) => {
-    if ( payload.action === 'grabKeys' ) {
-      chrome.storage.sync.get( null, (settings) => { 
-        port.postMessage(settings);
-      });
-    }
-    
+  
+
+  port.onMessage.addListener( ( payload ) => {    
     chrome.storage.sync.get( null, (settings) => { 
       settings.playlists = payload.playlists;
       chrome.storage.sync.set(settings, () => {});

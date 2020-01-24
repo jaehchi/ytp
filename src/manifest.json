@@ -12,8 +12,8 @@
   ],
   "background": {
     "scripts": [
-        "background.js",
-        "runtime.js"
+      "background.js",
+      "runtime.js"
     ]
   },
   "content_scripts": [
@@ -21,6 +21,7 @@
       "matches": ["<all_urls>"],
       "js": [
         "vendors/mousetrap.min.js",
+        "util/playlists.js",
         "content-script.js",
         "runtime.js"
       ],

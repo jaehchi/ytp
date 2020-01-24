@@ -25,15 +25,13 @@ export class AppComponent implements OnInit {
 
   async ngOnInit () {
     this.ytp_settings  = await this._keys.getKeys();
-    this.playlists = this.ytp_settings.playlists.map( (playlist, index) => { 
+    this.playlists = this.ytp_settings.playlists && this.ytp_settings.playlists.map( (playlist, index) => { 
       return { value: `${index}-${playlist}`, name: playlist };
     })
     this.selectedPlaylist = this.ytp_settings.theChosenOne;
   }
 
   savePlaylist (val) {
-    console.log('hitting playlists', val)
-
     chrome.storage.sync.set( { theChosenOne: val });
   }
 
