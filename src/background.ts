@@ -81,7 +81,7 @@ const handleShortcut = ( action: string ) => {
         });
       } else if ( action === '_save' ) {
         chrome.storage.sync.get('theChosenOne', ({ theChosenOne }) => {
-          chrome.tabs.executeScript(tab.id, { code: `var theChosenOne = '${theChosenOne}'`}, function () {
+          chrome.tabs.executeScript(tab.id, { code: `var theChosenOne = '${theChosenOne}'`}, () => {
             chrome.tabs.executeScript(tab.id, { file: `util/saveVideo.js` });
           });
         });
@@ -104,12 +104,12 @@ const handleToggleFocus = (activeTabId: number, ytTabId: number) => {
 const reinjectContentScripts = ( scripts ) => {
   const [ mousetrap, playlists, content_script, runtime ] = scripts;
  
-  chrome.tabs.query({}, function (tabs) {
+  chrome.tabs.query({}, (tabs) => {
     for ( let tab of tabs ) {
       if ( !tab.url.startsWith("chrome") ) {
         chrome.tabs.executeScript(tab.id, { file: mousetrap }, () => {
           chrome.tabs.executeScript(tab.id, { file: content_script }, () => {
-            chrome.tabs.executeScript(tab.id, { file: runtime })
+            chrome.tabs.executeScript(tab.id, { file: runtime });
           });
         });
       }
@@ -125,7 +125,6 @@ chrome.runtime.onInstalled.addListener( ({ reason }) => {
   
   if ( reason === 'update' ) {
     const contentScripts = chrome.runtime.getManifest().content_scripts[0].js;
-    console.log(contentScripts);
     reinjectContentScripts(contentScripts);
   }
 });
@@ -133,8 +132,6 @@ chrome.runtime.onInstalled.addListener( ({ reason }) => {
 
 
 chrome.runtime.onConnect.addListener((port) => {
-  
-
   port.onMessage.addListener( ( payload ) => {    
     chrome.storage.sync.get( null, (settings) => { 
       settings.playlists = payload.playlists;
