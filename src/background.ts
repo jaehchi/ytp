@@ -102,8 +102,8 @@ const handleToggleFocus = (activeTabId: number, ytTabId: number) => {
 
 
 const reinjectContentScripts = ( scripts ) => {
-  const [ mousetrap, content_script, runtime ] = scripts;
-  
+  const [ mousetrap, playlists, content_script, runtime ] = scripts;
+ 
   chrome.tabs.query({}, function (tabs) {
     for ( let tab of tabs ) {
       if ( !tab.url.startsWith("chrome") ) {

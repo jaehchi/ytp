@@ -6,15 +6,15 @@
 
     setTimeout(() => {
       const playlists = [...document.getElementById("section-items").children, ...document.getElementById("expandable-items").children ];
-    const viable = [];
+      const viable = [];
 
-    for ( let playlist of playlists ) {
-      if ( playlist.localName === "ytd-guide-entry-renderer" && playlist.lastElementChild.pathname.includes('playlist') && playlist.lastElementChild.title !== 'Liked videos' ) {
-        viable.push( playlist.lastElementChild.title );
+      for ( let playlist of playlists ) {
+        if ( playlist.localName === "ytd-guide-entry-renderer" && playlist.lastElementChild.pathname.includes('playlist') && playlist.lastElementChild.title !== 'Liked videos' ) {
+          viable.push( playlist.lastElementChild.title );
+        }
       }
-    }
-    
-    PORT.postMessage({ 'action': "getPlaylists", "playlists": viable.sort( (a, b) => { return a.localeCompare(b) }) });
+      
+      PORT.postMessage({ 'action': "getPlaylists", "playlists": viable.sort( (a, b) => { return a.localeCompare(b) }) });
     }, 1000);
   }
 
@@ -22,7 +22,7 @@
     _toggleGuideButton();
 
     setTimeout(() => {
-      document.getElementById('expander-item').click();
+      document.getElementById('expander-item') && document.getElementById('expander-item').click();
     }, 1000);
   }
 
